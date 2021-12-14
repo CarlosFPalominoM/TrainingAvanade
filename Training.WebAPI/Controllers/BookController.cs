@@ -28,10 +28,34 @@ namespace Training.WebAPI.Controllers
             return Ok(books);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            Book book = _bookService.Get(id);
+
+            return Ok(book);
+        }
+
         [HttpPut]
         public IActionResult Put(Book book)
         {
             _bookService.Update(book);
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult Post(Book book)
+        {
+            _bookService.Create(book);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            _bookService.Remove(id);
+
             return Ok();
         }
 

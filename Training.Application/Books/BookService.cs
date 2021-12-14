@@ -21,9 +21,24 @@ namespace Training.Application.Books
             }
         }
 
+        public void Create(Book book)
+        {
+            books.Add(book); 
+        }
+
         public IEnumerable<Book> Get()
         {
             return books;
+        }
+
+        public Book Get(int id)
+        {
+            return books.FirstOrDefault(x=>x.Id == id);
+        }
+
+        public void Remove(int id)
+        {
+            books = books.Where(x => x.Id != id).ToList();
         }
 
         public void Update(Book book)
