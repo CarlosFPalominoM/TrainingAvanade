@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Training.Application.Books;
+using Training.Core.Models;
 
 namespace Training.WebAPI.Controllers
 {
@@ -25,6 +26,13 @@ namespace Training.WebAPI.Controllers
             var books= _bookService.Get();
 
             return Ok(books);
+        }
+
+        [HttpPut]
+        public IActionResult Put(Book book)
+        {
+            _bookService.Update(book);
+            return Ok();
         }
 
     }

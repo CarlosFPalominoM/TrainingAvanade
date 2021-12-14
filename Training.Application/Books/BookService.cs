@@ -9,12 +9,27 @@ namespace Training.Application.Books
 {
     public class BookService:IBookService
     {
+        private List<Book> books;
+
+        public BookService()
+        {
+            books = new List<Book>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                books.Add(new Book { Id = i, Title = $"Book Title {i}", ISBN = $"BOOK{i}", Author = $"Author {i}" });
+            }
+        }
+
         public IEnumerable<Book> Get()
         {
-            for(int i=0; i<5;i++)
-            {
-                yield return new Book { Id = i, Title = "Book Title "+i, ISBN ="BOOK"+i };
-            }
+            return books;
+        }
+
+        public void Update(Book book)
+        {
+            books = books.Where(x => x.Id != book.Id).ToList();
+            books.Add(book);
         }
     }
 }
