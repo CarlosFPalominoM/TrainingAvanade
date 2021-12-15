@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Training.Application.Booking;
 using Training.Application.Books;
 using Training.Core.Repositories;
 using Training.DAL;
@@ -37,7 +38,10 @@ namespace Training.WebAPI
 
             services.AddTransient<ICustomDateTimeProvider, CustomDateTimeProvider>();
             services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IBookingService, BookingService>();
             services.AddSingleton<IBookRepository, BookRepository>();
+            services.AddSingleton<IBookingRepository, BookingRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
