@@ -4,47 +4,79 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Training.Core.Models;
+using Training.Core.Repositories;
 
 namespace Training.Application.Books
 {
-    public class BookService:IBookService
+    public class BookService : IBookService
     {
-        private List<Book> books;
 
-        public BookService()
+        private readonly IBookRepository _bookRepository;
+
+
+        public BookService(IBookRepository bookRepository)
         {
-            books = new List<Book>();
+            _bookRepository = bookRepository;
+        }
 
-            for (int i = 0; i < 5; i++)
+
+        public void Create(BookDto dto)
+        {
+            var book = Map(dto);
+
+            book.Id = Guid.NewGuid();
+
+            _bookRepository.Create(book);
+        }
+
+        public IEnumerable<BookDto> Get()
+        {
+            return _bookRepository.Get().Select(MapEntity);
+        }
+
+        public BookDto Get(string isbn)
+        {
+            return MapEntity(_bookRepository.Get(isbn));
+        }
+
+        public void Update(BookDto dto)
+        {
+            var book = _bookRepository.Get(dto.ISBN);
+
+            book.Author = dto.Author;
+            book.Name = dto.Name;
+
+            _bookRepository.Update(book);
+        }
+
+        public void Delete(string isbn)
+        {
+            var book = _bookRepository.Get(isbn);
+
+            book.IsDeleted = true;
+
+            _bookRepository.Update(book);
+        }
+
+
+        private Book Map(BookDto dto) 
+        {
+            return new Book
             {
-                books.Add(new Book { Id = i, Title = $"Book Title {i}", ISBN = $"BOOK{i}", Author = $"Author {i}" });
-            }
+                ISBN = dto.ISBN,
+                Name = dto.Name,
+                Author = dto.Author
+            };
         }
 
-        public void Create(Book book)
+        private BookDto MapEntity(Book dto)
         {
-            books.Add(book); 
-        }
-
-        public IEnumerable<Book> Get()
-        {
-            return books;
-        }
-
-        public Book Get(int id)
-        {
-            return books.FirstOrDefault(x=>x.Id == id);
-        }
-
-        public void Remove(int id)
-        {
-            books = books.Where(x => x.Id != id).ToList();
-        }
-
-        public void Update(Book book)
-        {
-            books = books.Where(x => x.Id != book.Id).ToList();
-            books.Add(book);
+            return new BookDto
+            {
+                ISBN = dto.ISBN,
+                Name = dto.Name,
+                Author = dto.Author
+            };
         }
     }
 }
