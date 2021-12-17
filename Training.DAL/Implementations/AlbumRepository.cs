@@ -18,22 +18,22 @@ namespace Training.DAL.Implementations
 
         public void Create(Album album)
         {
-            throw new NotImplementedException();
+            _trainingDbContext.Add(album);
         }
 
         public IEnumerable<Album> Get()
         {
-            throw new NotImplementedException();
+            return _trainingDbContext.Albums.Where(a => !a.IsDeleted);
         }
 
         public Album Get(string code)
         {
-            throw new NotImplementedException();
+            return _trainingDbContext.Albums.FirstOrDefault(a => a.Code == code && !a.IsDeleted);
         }
 
         public void Update(Album album)
         {
-            throw new NotImplementedException();
+            _trainingDbContext.Update(album);
         }
     }
 }
